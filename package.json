@@ -27,6 +27,7 @@
     "@fortawesome/free-solid-svg-icons": "^6.7.2",
     "@swimlane/ngx-charts": "^13.0.2",
     "@types/html2canvas": "^0.5.35",
+    "angular-datatables": "^6.0.0",
     "bootstrap": "^4.5.0",
     "d3": "^7.9.0",
     "datatables.net": "^1.11.3",

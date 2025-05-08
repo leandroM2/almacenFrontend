@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
-
+import {DataTablesModule} from 'angular-datatables'
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -79,7 +79,8 @@ import { IncomeDetail2Component } from './components/income-detail2/income-detai
     FlexLayoutModule,
     SharedModule,
     HttpClientModule,
-    NgxChartsModule
+    NgxChartsModule,
+    DataTablesModule
   ],
   providers: [{
     provide: HTTP_INTERCEPTORS,
