@@ -5,10 +5,22 @@ import { SupplierBModel } from 'src/app/model/supplier-model';
 import { MensajesService } from 'src/app/services/mensajes.service';
 import { ProveedoresService } from 'src/app/services/proveedores.service';
 
+import { trigger, state, style, transition, animate } from '@angular/animations';
+
 @Component({
   selector: 'app-proveedores',
   templateUrl: './proveedores.component.html',
-  styleUrls: ['./proveedores.component.scss']
+  styleUrls: ['./proveedores.component.scss'],
+
+  animations: [
+    trigger('accordionAnimation', [
+      state('collapsed', style({ height: '0px', opacity: 0, overflow: 'hidden' })),
+      state('expanded', style({ height: '*', opacity: 1 })),
+      transition('collapsed <=> expanded', [
+        animate('300ms ease-in-out')
+      ])
+    ])
+  ]
 })
 export class ProveedoresComponent implements OnInit {
 
@@ -33,7 +45,6 @@ export class ProveedoresComponent implements OnInit {
   isUpdate: boolean = false;
 
   ngOnInit(): void {
-    this.list(); 
     this.listB();
     //definir las propiedades del formgroup
     this.formSupplier = new FormGroup({
@@ -48,17 +59,6 @@ export class ProveedoresComponent implements OnInit {
     item.expanded = !item.expanded;
   }
   //funcion para listar
-  list(){
-    this.proveedoresService.getSuppliers().subscribe(resp=>{
-      if(resp){
-        this.listSuppliers = resp;
-      }
-    });
-    const filterInput = document.getElementById('filter') as HTMLInputElement;
-    if (filterInput) {
-      filterInput.value = '';
-    }
-  }
 
   listB(){
     this.proveedoresService.getSuppAcc().subscribe(resp=>{
@@ -83,7 +83,7 @@ export class ProveedoresComponent implements OnInit {
       if(resp){
         this.responseMessage = resp.mensaje;
         this.mensajesService.AbrirMensaje(this.responseMessage,"check");
-        this.list();
+        this.listB();
         this.formSupplier.reset();
       }
     },
@@ -97,7 +97,7 @@ export class ProveedoresComponent implements OnInit {
       if(resp){
         this.responseMessage = resp.mensaje;
         this.mensajesService.AbrirMensaje(this.responseMessage,"check");
-        this.list();
+        this.listB();
         this.newSupplier();
       }
     },
@@ -114,7 +114,7 @@ export class ProveedoresComponent implements OnInit {
       if(resp){
         this.responseMessage = resp.mensaje;
         this.mensajesService.AbrirMensaje(this.responseMessage,"check");
-        this.list();
+        this.listB();
       }
     },
     (error:any) => {
@@ -133,8 +133,8 @@ export class ProveedoresComponent implements OnInit {
   selectItem(item: any) {
     this.isUpdate = true;
     this.formSupplier.controls['id'].setValue(item.id);
-    this.formSupplier.controls['razonSocial'].setValue(item.razonSocial);
+    this.formSupplier.controls['razonSocial'].setValue(item.razSocial);
     this.formSupplier.controls['ruc'].setValue(item.ruc);
-    this.formSupplier.controls['contacto'].setValue(item.contacto);
+    this.formSupplier.controls['contacto'].setValue(item.contactNumber);
   }
 }

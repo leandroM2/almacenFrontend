@@ -4,47 +4,14 @@
               <h1 style="text-align: center; color: white;">Gestión de Proveedores</h1>
         </div> 
     </nav>
-    
-    
+
     <div class="col-md-12 p-2">
       <div class="mb-3">
         <input type="text" id="filter" placeholder="Buscar por Razon Social" [(ngModel)]="filterTerm" style="width: 300px;">
-        <button type="button" class="btn btn-primary btn-sm" style="margin-left: 20px;"(click)="filterCategories()">Filtrar</button>
+        <!--<button type="button" class="btn btn-primary btn-sm" style="margin-left: 20px;"(click)="filterCategories()">Filtrar</button>-->
         <button type="button" class="btn btn-success btn-sm" style="margin-left: 10px;" (click)="listB()">Ver Lista Completa</button>
       </div>
-        <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#exampleModal"><i class="fa fa-user"></i>  Nuevo Proveedor</button>
-        <table datatable class="table mt-2 table-bordered">
-            <thead class="table-primary">
-              <tr>
-                <th>ID</th>
-                <th>Razon Social</th>
-                <th>RUC</th>
-                <th>Contacto Central</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let item of listSuppliers">
-                <td>{{item.id}}</td>
-                <td>{{item.razonSocial}}</td>
-                <td>{{item.ruc}}</td>
-                <td>{{item.contacto}}</td>
-                
-                <td>
-                    <button type="button" class="btn btn-warning btn-sm"  data-bs-toggle="modal" data-bs-target="#exampleModal" (click)="selectItem(item)" >
-                        <i class="fa fa-pencil"></i>
-                    </button>
-                    &nbsp;
-                    <button type="button" class="btn btn-danger btn-sm" (click)="delete(item.id)">
-                        <i class="fa fa-trash"></i>
-                    </button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-    </div>
-
-    <div class="col-md-12 p-2">
+      <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#exampleModal"><i class="fa fa-user"></i>  Nuevo Proveedor</button>
       <table class="table mt-2 table-bordered">
         <thead class="table-primary">
           <tr>
@@ -62,7 +29,7 @@
               <td class="accordion-header" (click)="toggleAccordion(item)">{{item.razSocial}}</td>
               <td class="accordion-header" (click)="toggleAccordion(item)">{{item.ruc}}</td>
               <td class="accordion-header" (click)="toggleAccordion(item)">{{item.contactNumber}}</td>
-              <td class="accordion-header" (click)="toggleAccordion(item)">
+              <td class="accordion-header">
                 <button type="button" class="btn btn-warning btn-sm"  data-bs-toggle="modal" data-bs-target="#exampleModal" (click)="selectItem(item)" >
                     <i class="fa fa-pencil"></i>
                 </button>
@@ -70,11 +37,11 @@
                 <button type="button" class="btn btn-danger btn-sm" (click)="delete(item.id)">
                     <i class="fa fa-trash"></i>
                 </button>
-                <span class="arrow" [class.expanded]="item.expanded">▼</span>
+                <span class="arrow" [class.expanded]="item.expanded" (click)="toggleAccordion(item)">▼</span>
             </td>
           </tr>
 
-          <tr *ngIf="item.expanded">
+          <tr  [@accordionAnimation]="item.expanded ? 'expanded' : 'collapsed'" *ngIf="item.expanded">
             <td colspan="5">
               <table class="table mt-2 table-borderless">
                 <thead class="table-info">
@@ -107,7 +74,7 @@
    </div>
 
 <!-- TODO: Modals -->
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
