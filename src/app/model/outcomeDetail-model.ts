@@ -1,0 +1,31 @@
+export class outcomeDetailModel {
+		id: number=0;
+		cantidad: number=0;
+		precioDeVenta: number=0.0;
+		saldo: number=0;
+		outcomeId: number=0;
+		outcomeFecha: Date = new Date();
+		outcomeEstado: boolean=false;
+		outcomeClientId: number=0;
+		outcomeClientRazonSocial: string='';
+		outcomeClientRuc: number=0;
+		outcomeClientCorreo: string='';
+		outcomeClientContacto: number=0;
+		outcomeClientDireccion: string='';
+		outcomeUserId: number=0;
+		outcomeUserNombre: string='';
+		outcomeUserAuthId: number=0;
+		outcomeUserAuthNombre: string='';
+		productId: string='';
+		productNombre: string='';
+		productColor: string='';
+		productPrecio: number=0.0;
+		productStock: number=0;
+		productEstado: boolean=false;
+		productCategoryId: number=0;
+		productCategoryNombre: string='';
+		productSupplierId: number=0;
+		productSupplierRazonSocial: string='';
+		productSupplierRuc: number=0;
+		productSupplierContacto: number=0;
+	}

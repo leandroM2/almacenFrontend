@@ -1,0 +1,56 @@
+h1 {
+    color:red;
+    text-align: center;
+}
+
+h2 {
+    text-align: center;
+}
+
+.red {
+    color: red;
+    text-align: center;
+}
+
+.formcontainer {
+    display: flex;
+    gap: 40px; /* Espacio entre los formularios */
+    margin: 10px;
+    justify-content: center;
+}
+
+label {
+    margin: 10px ;
+    font-size: 18px;
+}
+select {
+    margin-left: 20px;
+    font-size: 18px;
+    padding: 5px;
+    background-color: rgb(230, 230, 230);
+}
+button {
+    padding: 5px 20px;;
+    margin: 15px;
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.container {
+    display: inline-flex;
+    justify-content: center;
+
+}
+
+#dales2 {
+    margin-left: 15px !important;
+    width: 350px !important;
+  }
+
+.centergrafics{
+    display: flex;
+    justify-content: center;
+}

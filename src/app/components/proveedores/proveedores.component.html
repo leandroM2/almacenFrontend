@@ -1,0 +1,154 @@
+<app-dashboard></app-dashboard>
+    <nav  style="background-color: #700d0d;">
+        <div class="container-fluid" style="padding: 10px">
+              <h1 style="text-align: center; color: white;">Gestión de Proveedores</h1>
+        </div> 
+    </nav>
+    
+    <div class="col-md-12 p-2">
+      <div class="mb-3">
+        <input type="text" id="filter" placeholder="Buscar por Razon Social" [(ngModel)]="filterTerm" style="width: 300px;">
+        <button type="button" class="btn btn-primary btn-sm" style="margin-left: 20px;"(click)="filterCategories()">Filtrar</button>
+        <button type="button" class="btn btn-success btn-sm" style="margin-left: 10px;" (click)="listB()">Ver Lista Completa</button>
+      </div>
+        <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#exampleModal"><i class="fa fa-user"></i>  Nuevo Proveedor</button>
+        <table datatable class="table mt-2 table-bordered">
+            <thead class="table-primary">
+              <tr>
+                <th>ID</th>
+                <th>Razon Social</th>
+                <th>RUC</th>
+                <th>Contacto Central</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of listSuppliers">
+                <td>{{item.id}}</td>
+                <td>{{item.razonSocial}}</td>
+                <td>{{item.ruc}}</td>
+                <td>{{item.contacto}}</td>
+                
+                <td>
+                    <button type="button" class="btn btn-warning btn-sm"  data-bs-toggle="modal" data-bs-target="#exampleModal" (click)="selectItem(item)" >
+                        <i class="fa fa-pencil"></i>
+                    </button>
+                    &nbsp;
+                    <button type="button" class="btn btn-danger btn-sm" (click)="delete(item.id)">
+                        <i class="fa fa-trash"></i>
+                    </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+    </div>
+
+    <div class="col-md-12 p-2">
+      <table class="table mt-2 table-bordered">
+        <thead class="table-primary">
+          <tr>
+            <th>ID</th>
+            <th>Razon Social</th>
+            <th>RUC</th>
+            <th>Contacto Central</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <ng-container *ngFor="let item of listSuppliersB">
+            <tr class="accordion">
+              <td class="accordion-header" (click)="toggleAccordion(item)">{{item.id}}</td>
+              <td class="accordion-header" (click)="toggleAccordion(item)">{{item.razSocial}}</td>
+              <td class="accordion-header" (click)="toggleAccordion(item)">{{item.ruc}}</td>
+              <td class="accordion-header" (click)="toggleAccordion(item)">{{item.contactNumber}}</td>
+              <td class="accordion-header" (click)="toggleAccordion(item)">
+                <button type="button" class="btn btn-warning btn-sm"  data-bs-toggle="modal" data-bs-target="#exampleModal" (click)="selectItem(item)" >
+                    <i class="fa fa-pencil"></i>
+                </button>
+                &nbsp;
+                <button type="button" class="btn btn-danger btn-sm" (click)="delete(item.id)">
+                    <i class="fa fa-trash"></i>
+                </button>
+                <span class="arrow" [class.expanded]="item.expanded">▼</span>
+            </td>
+          </tr>
+
+          <tr *ngIf="item.expanded">
+            <td colspan="5">
+              <table class="table mt-2 table-borderless">
+                <thead class="table-info">
+                  <tr>
+                    <th>Factory ID</th>
+                    <th>Factory Name</th>
+                    <th>Factory Address</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let factory of item.details">
+                    <td>{{ factory.supDetId }}</td>
+                    <td>{{ factory.supDetFactory }}</td>
+                    <td>{{ factory.supDetAddress }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </td>
+          </tr>
+
+
+          </ng-container>
+
+
+
+        </tbody>
+
+
+      </table>
+   </div>
+
+<!-- TODO: Modals -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 *ngIf="!isUpdate" class="modal-title fs-5">Nuevo Proveedor</h1>
+          <h1 *ngIf="isUpdate" class="modal-title fs-5">Actualizar Proveedor</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="newSupplier()"></button>
+        </div>
+        <div class="modal-body">
+            <form [formGroup]="formSupplier">
+                <div class="mb-3 row">
+                    <label class="col-sm-2 col-form-label">Razon Social</label>
+                    <div class="col-sm-10">
+                      <input type="text" class="form-control" formControlName="razonSocial">
+                    </div>
+                </div>
+              </form>
+        </div>
+        <div class="modal-body">
+            <form [formGroup]="formSupplier">
+                <div class="mb-3 row">
+                    <label class="col-sm-2 col-form-label">RUC</label>
+                    <div class="col-sm-10">
+                      <input type="text" class="form-control" formControlName="ruc">
+                    </div>
+                </div>
+              </form>
+        </div>
+        <div class="modal-body">
+            <form [formGroup]="formSupplier">
+                <div class="mb-3 row">
+                    <label class="col-sm-2 col-form-label">Contacto</label>
+                    <div class="col-sm-10">
+                      <input type="text" class="form-control" formControlName="contacto">
+                    </div>
+                </div>
+              </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal" (click)="newSupplier()" >Cerrar</button>
+          <button *ngIf="!isUpdate" type="button" class="btn btn-success btn-sm" (click)="save()">Guardar</button>
+          <button *ngIf="isUpdate" type="button" class="btn btn-warning btn-sm" data-bs-dismiss="modal" (click)="update()">Actualizar</button>
+        </div>
+      </div>
+    </div>
+  </div>

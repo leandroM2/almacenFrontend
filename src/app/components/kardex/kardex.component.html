@@ -1,0 +1,342 @@
+<app-dashboard></app-dashboard>
+<nav style="background-color: #700d0d;">
+    <div class="container-fluid" style="padding: 10px">
+        <h1 style="text-align: center; color: white;">K A R D E X</h1>
+    </div>
+</nav>
+
+<div class="col-md-12 p-2">
+    <div class="mb-3 filter">
+        <!-- <input type="date" id="filter" [(ngModel)]="filterTerm" style="width: 300px;"> -->
+        <input type="date" id="start" [(ngModel)]="startDate" [(ngModel)]="fechaInicio" style="width: 250px;">
+        <input type="date" id="end" [(ngModel)]="endDate" [(ngModel)]="fechaFin" style="width: 250px;">
+        <button type="button" class="btn btn-primary btn-sm" style="margin-left: 20px;" (click)="filterCategories()"><i
+                class="fa fa-search"></i> Filtrar por Fechas</button>
+        <button type="button" class="btn btn-secondary btn-sm" style="margin-left: 10px;" (click)="list()"><i
+                class="fa fa-reorder"></i> VER LISTA DE MOVIMIENTOS</button>
+        <button type="button" class="btn btn-success btn-sm" style="margin-left: 10px;" (click)="listautorizar()"><i
+                class="fa fa-check"></i> AUTORIZAR MOVIMIENTOS</button>
+    </div>
+    <div class="mb-3 filt">
+        <!-- <input type="text" [(ngModel)]="selectproduct" class="form-control" placeholder="Inserte el producto a buscar" style="width: 250px;"> -->
+                <select id="dales" class="form-select" [(ngModel)]="selectproduct">
+                    <option value="" selected disabled>Seleccionar Producto</option>
+                    <option *ngFor="let product of listproducts" [value]="product.prodDesc">
+                        {{product.prodDesc}}
+                    </option>
+                </select>
+        <button type="button" class="btn btn-primary btn-sm" style="margin-left: 20px;" (click)="filterProducts()"><i
+            class="fa fa-search"></i> Filtrar por Producto</button>
+    </div>
+    <div class="buttons">
+        <div class="left-buttons">
+            <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#exampleModal"
+                (click)="establecerFechaActual()"><i class="fa fa-cart-plus"></i> Agregar Entrada</button>
+            <button type="button" class="btn btn-dark btn-sm" data-bs-toggle="modal" data-bs-target="#exampleModal3"
+                (click)="establecerFechaActual2()"><i class="fa fa-cart-arrow-down"></i> Agregar Salida</button>
+        </div>
+        <div class="right-buttons">
+            <button type="button" class="btn btn-success btn-sm" (click)="listEntradas()"><i
+                    class="fa fa-plus-square"></i> VER ENTRADAS</button>
+            <button type="button" class="btn btn-danger btn-sm" (click)="listSalidas()"><i
+                    class="fa fa-minus-square"></i> VER SALIDAS</button>
+        </div>
+    </div>
+    <div id="tableToPDF">
+        <table class="table mt-2 table-bordered">
+            <thead class="table-primary">
+                <tr>
+                    <th rowspan="2">ID</th>
+                    <th rowspan="2">Fecha</th>
+                    <th rowspan="2">Tipo Pago</th>
+                    <th rowspan="2">Factura</th>
+                    <th rowspan="2">T. Movimiento</th>
+                    <th colspan="2">Cliente</th>
+                    <th colspan="5">Detalles</th>
+                    <th rowspan="2">Acciones</th>
+                </tr>
+                <tr>
+                    <th>Raz. Social</th>
+                    <th>Fábrica</th>
+                    <th>Producto</th>
+                    <th>Cantidad</th>
+                    <th>Precio Venta</th>
+                    <th>Saldo</th>
+                    <th>Valor Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                <ng-container *ngFor="let item of listKardex">
+                    <tr *ngFor="let detalle of item.details; let first = first">
+                        <td *ngIf="first" [attr.rowspan]="item.details.length">{{item.id}}</td>
+                        <td *ngIf="first" [attr.rowspan]="item.details.length">{{item.fecha}}</td>
+                        <td *ngIf="first" [attr.rowspan]="item.details.length">{{item.tipoPago}}</td>
+                        <td *ngIf="first" [attr.rowspan]="item.details.length">{{item.factura}}</td>
+                        <td *ngIf="first" [attr.rowspan]="item.details.length">{{item.tipoMov}}</td>
+                        <td *ngIf="first" [attr.rowspan]="item.details.length">{{item.persona}}</td>
+                        <td *ngIf="first" [attr.rowspan]="item.details.length">{{item.personaDet}}</td>
+                        <td>{{detalle.producto}}</td>
+                        <td>{{detalle.cantidad}}</td>
+                        <td>{{detalle.precioVenta}}</td>
+                        <td>{{detalle.saldo}}</td>
+                        <td>{{detalle.total}}</td>
+                        <td *ngIf="first" [attr.rowspan]="item.details.length">
+                            <button type="button" class="btn btn-success btn-sm" (click)="auth(item.id)"
+                                [disabled]="item.estado">
+                                <i class="fa fa-check"></i>
+                            </button>
+                            &nbsp;
+                            <button type="button" class="btn btn-dark btn-sm" (click)="archives(item.id)"
+                                [disabled]="item.estado">
+                                <i class="fa fa-file-text"></i>
+                            </button>
+                            &nbsp;
+                            <button type="button" class="btn btn-warning btn-sm" (click)="download(item.id)">
+                                <i class="fa fa-download"></i>
+                            </button>
+                        </td>
+                    </tr>
+                </ng-container>
+            </tbody>
+        </table>        
+    </div>
+</div>
+
+<!-- TODO: Modals -->
+<!-- modal de income -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 *ngIf="!isUpdate" class="modal-title fs-5">Nueva Entrada</h1>
+                <h1 *ngIf="isUpdate" class="modal-title fs-5">Actualizar Entrada</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+                    (click)="newIncome()"></button>
+            </div>
+            <div class="modal-body">
+                <form [formGroup]="formIncome">
+                    <div class="mb-3 row">
+                        <label class="col-sm-2 col-form-label">Fecha</label>
+                        <div class="col-sm-10">
+                            <input type="date" id="fechaActual" class="form-control" formControlName="fecha" readonly>
+                        </div>
+                    </div>
+                    <div class="mb-3 row">
+                        <label class="col-sm-2 col-form-label">Tipo de Pago</label>
+                        <div class="col-sm-10">
+                            <select id="tipopago" class="form-select" formControlName="tipoPago" style="background-color:rgb(235, 235, 235)">
+                                <option value='' selected disabled>Seleccionar Tipo de Pago</option>
+                                <option value="Efectivo">Efectivo</option>
+                                <option value="Transferencia">Transferencia</option>
+                            </select>
+                        </div>
+                        <label class="col-sm-2 col-form-label">Proveedor</label>
+                        <div class="col-sm-10" >
+                            <select id="supinc" class="form-select" formControlName="supId" style="background-color:rgb(235, 235, 235)"
+                            (change)="onSupplierChange($any($event.target).value)">
+                            <option value='' selected disabled>Seleccionar Proveedor</option>
+                            <option *ngFor="let supplier of listsuppliers" [value]="supplier.id">
+                                {{supplier.razonSocial}}
+                            </option>
+                        </select>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal"  (click)="newIncome()">Cerrar</button>
+                <button *ngIf="!isUpdate" id="modal2" type="button" class="btn btn-success btn-sm"
+                    data-bs-toggle="modal" data-bs-target="#exampleModal2" (click)="save()">Guardar</button>
+                <!-- <button *ngIf="isUpdate" type="button" class="btn btn-warning btn-sm" data-bs-dismiss="modal" (click)="update()">Actualizar</button> -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- modal de incomeDetail -->
+<div class="modal fade" id="exampleModal2" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 *ngIf="!isUpdate" class="modal-title fs-5">Nuevo Detalle</h1>
+                <h1 *ngIf="isUpdate" class="modal-title fs-5">Actualizar Detalle</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+                    (click)="newIncomeDetail()"></button>
+            </div>
+            <div class="modal-body">
+                <form [formGroup]="formIncomeDetail">
+                    <div class="mb-3 row">
+                        <label class="col-sm-2 col-form-label">Producto</label>
+                        <div class="col-sm-10">
+                            <select id="prodinc" class="form-select" formControlName="prodId" style="background-color:rgb(235, 235, 235)"
+                                (ngModelChange)="getProductDetails($event)">
+                                <option value="" selected disabled>Seleccionar Producto</option>
+                                <option *ngFor="let product of filteredProducts" [value]="product.prodId">
+                                    {{product.prodId}} - {{product.prodDesc}}
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="mb-3 row">
+                        <label class="col-sm-2 col-form-label">Stock Actual</label>
+                        <div class="col-sm-10">
+                            <input type="number" id="saldo" formControlName="saldo" class="form-control" readonly>
+                        </div>
+                    </div>
+                    <div class="mb-3 row">
+                        <label class="col-sm-2 col-form-label">PRE. ACTUAL:</label>
+                        <div class="col-sm-10">
+                            <input type="number" id="oldPrecioVenta" class="form-control" formControlName="oldPrecioVenta" readonly>
+                        </div>
+                    </div>
+                    <div class="mb-3 row">
+                        <label class="col-sm-2 col-form-label">Precio Venta:</label>
+                        <div class="col-sm-10">
+                            <input type="number" id="precioVenta" min="0.0" step="0.01" class="form-control"
+                            formControlName="precioVenta" (input)="onPrecioChange()">
+                        </div>
+                    </div>
+                    <div class="mb-3 row">
+                        <label class="col-sm-2 col-form-label">Precio Promedio:</label>
+                        <div class="col-sm-10">
+                            <input type="number" formControlName="precioVentaUnit" id="precioVentaUnit" step="0.01" class="form-control" readonly>
+                        </div>
+                    </div>
+                    <div class="mb-3 row">
+                        <label class="col-sm-2 col-form-label">Cantidad</label>
+                        <div class="col-sm-10">
+                            <input type="number" min=0 id="cantidad" class="form-control" formControlName="cantidad">
+                        </div>
+                    </div>
+                    <div class="mb-3 row">
+                        <label class="col-sm-2 col-form-label">ID Entrada</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" formControlName="incomeId" readonly>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal" (click)="newIncomeDetail()">Cerrar</button>
+                <button *ngIf="!isUpdate" type="button" class="btn btn-success btn-sm"
+                    (click)="save2()">Guardar</button>
+                <!-- <button *ngIf="isUpdate" type="button" class="btn btn-warning btn-sm" data-bs-dismiss="modal" (click)="update()">Actualizar</button> -->
+            </div>
+        </div>
+    </div>
+</div>
+<!-- modal de Outcome -->
+<div class="modal fade" id="exampleModal3" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 *ngIf="!isUpdate" class="modal-title fs-5">Nueva Salida</h1>
+                <h1 *ngIf="isUpdate" class="modal-title fs-5">Actualizar Salida</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+                    (click)="newOutcome()"></button>
+            </div>
+            <div class="modal-body">
+                <form [formGroup]="formOutcome">
+                    <div class="mb-3 row">
+                        <label class="col-sm-2 col-form-label">Fecha</label>
+                        <div class="col-sm-10">
+                            <input type="date" id="fechaActual" class="form-control" formControlName="fecha" readonly>
+                        </div>
+                    </div>
+                    <div class="mb-3 row">
+                        <label class="col-sm-2 col-form-label">Cliente</label>
+                        <div class="col-sm-10">
+                            <select id="clien" class="form-select" formControlName="clientId" style="background-color:rgb(235, 235, 235)">
+                                <option value="" selected disabled>Seleccionar Cliente</option>
+                                <option *ngFor="let cliente of listclients" [value]="cliente.id">
+                                    {{cliente.razonSocial}}
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="mb-3 row">
+                        <label class="col-sm-2 col-form-label">Tipo de Pago</label>
+                        <div class="col-sm-10">
+                            <select id="tipopago2" class="form-select" formControlName="tipoPago" style="background-color:rgb(235, 235, 235)">
+                                <option value="" selected disabled>Seleccionar Tipo de Pago</option>
+                                <option value="Efectivo">Efectivo</option>
+                                <option value="Transferencia">Transferencia</option>
+                            </select>
+                        </div>
+                    </div>
+                    <!-- <div class="mb-3 row">
+                        <label class="col-sm-2 col-form-label">Factura</label>
+                        <div class="col-sm-10">
+                            <input type="text" id="fact" class="form-control" formControlName="factura" >
+                        </div>
+                    </div> -->
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal" (click)="newOutcome()">Cerrar</button>
+                <button *ngIf="!isUpdate" type="button" class="btn btn-success btn-sm" data-bs-toggle="modal"
+                    data-bs-target="#exampleModal4" (click)="save3()">Guardar</button>
+                <!-- <button *ngIf="isUpdate" type="button" class="btn btn-warning btn-sm" data-bs-dismiss="modal" (click)="update()">Actualizar</button> -->
+            </div>
+        </div>
+    </div>
+</div>
+<!-- modal de OutcomeDetail -->
+<div class="modal fade" id="exampleModal4" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 *ngIf="!isUpdate" class="modal-title fs-5">Nuevo Detalle</h1>
+                <h1 *ngIf="isUpdate" class="modal-title fs-5">Actualizar Detalle</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+                    (click)="newOutcomeDetail()"></button>
+            </div>
+            <div class="modal-body">
+                <form [formGroup]="formOutcomeDetail">
+                    <div class="mb-3 row">
+                        <label class="col-sm-2 col-form-label">Producto</label>
+                        <div class="col-sm-10">
+                            <select id="prod" class="form-select" formControlName="prodId"  style="background-color:rgb(235, 235, 235)"
+                                (ngModelChange)="ProductDetails($event)">
+                                <option value="" selected disabled>Seleccionar Producto</option>
+                                <option *ngFor="let product of listproducts" [value]="product.prodId">
+                                    {{product.prodId}} - {{product.prodDesc}}
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="mb-3 row">
+                        <label class="col-sm-2 col-form-label">Stock Actual</label>
+                        <div class="col-sm-10">
+                            <input type="number" id="stockact2" class="form-control" readonly>
+                        </div>
+                    </div>
+                    <div class="mb-3 row">
+                        <label class="col-sm-2 col-form-label">Precio Actual:</label>
+                        <div class="col-sm-10">
+                            <input type="number" id="preact2" class="form-control" readonly>
+                        </div>
+                    </div>
+                    <div class="mb-3 row">
+                        <label class="col-sm-2 col-form-label">Cantidad</label>
+                        <div class="col-sm-10">
+                            <input type="number" min=0 id="cantidad2" class="form-control" formControlName="cantidad">
+                        </div>
+                    </div>
+                    <div class="mb-3 row">
+                        <label class="col-sm-2 col-form-label">ID Salida</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" formControlName="outcomeId" readonly>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal" (click)="newOutcomeDetail()">Cerrar</button>
+                <button *ngIf="!isUpdate" type="button" class="btn btn-success btn-sm"
+                    (click)="save4()">Guardar</button>
+                <!-- <button *ngIf="isUpdate" type="button" class="btn btn-warning btn-sm" data-bs-dismiss="modal" (click)="update()">Actualizar</button> -->
+            </div>
+        </div>
+    </div>
+</div>

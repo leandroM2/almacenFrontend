@@ -1,0 +1,55 @@
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark" >
+  <div class="container-fluid">
+    <a class="navbar-brand" >S.P.A</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <!-- <li class="nav-item" onmouseover="this.style.backgroundColor='#80838A'" onmouseout="this.style.backgroundColor='transparent'">
+          <a class="nav-link active" aria-current="page" href="#">Inicio</a>
+        </li> -->
+        <li class="nav-item dropdown" onmouseover="this.style.backgroundColor='#80838A'" onmouseout="this.style.backgroundColor='transparent'">
+          <a class="nav-link active dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="fa fa-coffee"></i> Gestion
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <li><a class="dropdown-item" (click)="accionUser()" >Usuarios</a></li>
+            <li><a class="dropdown-item" (click)="accionCategory()" >Familias</a></li>
+            <li><a class="dropdown-item" (click)="accionType()" >Tipos</a></li>
+            <li><a class="dropdown-item" (click)="accionLocation()" >Locación</a></li>
+            <li><a class="dropdown-item" (click)="accionProducts()" >Productos</a></li>
+            <li><a class="dropdown-item" (click)="accionProveedores()" >Proveeedores</a></li>
+            <li><a class="dropdown-item" (click)="accionClientes()" >Clientes</a></li>
+          </ul>
+        </li>
+        <li class="nav-item dropdown" onmouseover="this.style.backgroundColor='#80838A'" onmouseout="this.style.backgroundColor='transparent'">
+          <a class="nav-link active dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="fa fa-refresh"></i> Entradas/Salidas
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <li><a class="dropdown-item" (click)="accionentradas()" >Entradas</a></li>
+            <li><a class="dropdown-item" (click)="accionEntradasDetalle2()" >Detalle de entradas</a></li>
+            <li><a class="dropdown-item" (click)="accionsalidas()" >Salidas</a></li>
+            <li><a class="dropdown-item" (click)="accionSalidasDetalle2()">Detalle de Salidas</a></li>
+
+          </ul>
+        </li>
+        <li class="nav-item" onmouseover="this.style.backgroundColor='#80838A'" onmouseout="this.style.backgroundColor='transparent'">
+          <a class="nav-link active" aria-current="page" (click)="accionKardex()"><i class="fa fa-book"></i> Kardex</a>
+      </li>
+        <li class="nav-item" onmouseover="this.style.backgroundColor='#80838A'" onmouseout="this.style.backgroundColor='transparent'">
+          <a class="nav-link active" aria-current="page" (click)="accionGraficos()"><i class="fa fa-bar-chart"></i> Graficos</a>
+      </li>
+        <!-- <li class="nav-item" onmouseover="this.style.backgroundColor='#80838A'" onmouseout="this.style.backgroundColor='transparent'">
+            <a class="nav-link active" aria-current="page" href="#">Acerca de</a>
+        </li> -->
+        <li class="nav-item" onmouseover="this.style.backgroundColor='#80838A'" onmouseout="this.style.backgroundColor='transparent'">
+          <a class="nav-link active" aria-current="page" (click)="accionServicioTecnico()"><i class="fa fa-phone"></i> Servicio Tecnico</a>
+      </li>
+      </ul>
+    </div>
+    <a class="navbar-brand" href="/" (click)="cerrarSesion()" ><i class="fa fa-sign-out"></i> Cerrar Sesion</a>
+  </div>
+</nav>

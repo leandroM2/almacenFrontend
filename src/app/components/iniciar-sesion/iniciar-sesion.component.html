@@ -1,0 +1,67 @@
+<mat-toolbar color="primary">
+    <mat-toolbar-row fxLayout="row">
+        <span>Registrarse</span>
+        <span class="spacer"></span>
+        <button class="mat-dialog-close" mat-icon-button mat-dialog-close>
+            <mat-icon>close</mat-icon>
+        </button>
+    </mat-toolbar-row>
+</mat-toolbar>
+
+<mat-dialog-content class="mat-typography">
+    <form [formGroup]="iniciarSesionForm">
+        <div fxFlex fxLayout="column">
+            <mat-form-field appearance="standard" fxFlex>
+                <mat-label>Nombre</mat-label>
+                <input matInput formControlName="nombre" required>
+                <mat-error
+                    *ngIf="iniciarSesionForm.controls.nombre.touched && iniciarSesionForm.controls.nombre.invalid">
+                    <span *ngIf="iniciarSesionForm.controls.nombre.errors.required">Este campo es obligatorio</span>
+                    <span *ngIf="iniciarSesionForm.controls.nombre.errors.pattern">Este campo no es válido</span>
+                </mat-error>
+            </mat-form-field>
+            <mat-form-field appearance="standard" fxFlex>
+                <mat-label>Email</mat-label>
+                <input matInput formControlName="email" required>
+                <mat-error
+                    *ngIf="iniciarSesionForm.controls.email.touched && iniciarSesionForm.controls.email.invalid">
+                    <span *ngIf="iniciarSesionForm.controls.email.errors.required">Este campo es obligatorio</span>
+                    <span *ngIf="iniciarSesionForm.controls.email.errors.pattern">Este campo no es válido</span>
+                </mat-error>
+            </mat-form-field>
+            <mat-form-field appearance="standard" fxFlex>
+                <mat-label>Contraseña</mat-label>
+                <input matInput formControlName="contrasena" type="password" required [type]="contra ? 'contra': ''">
+                <button type="button" mat-icon-button matSuffix (click)="contra = !contra" [attr.arial-label]="'Hide contrasena'">
+                    <mat-icon>{{contra ? 'visibility_off' : 'visibility'}}</mat-icon>
+                </button>
+                <mat-error
+                    *ngIf="iniciarSesionForm.controls.contrasena.touched && iniciarSesionForm.controls.contrasena.invalid">
+                    <span *ngIf="iniciarSesionForm.controls.contrasena.errors.required">Este campo es obligatorio</span>
+                </mat-error>
+            </mat-form-field>
+            <mat-form-field appearance="standard" fxFlex>
+                <mat-label>Confirmar Contraseña</mat-label>
+                <input matInput formControlName="confirmarContrasena" type="password" required [type]="confirmarContra ? 'confirmarContra': ''">
+                <button type="button" mat-icon-button matSuffix (click)="confirmarContra = !confirmarContra" [attr.arial-label]="'Hide contrasena'">
+                    <mat-icon>{{confirmarContra ? 'visibility_off' : 'visibility'}}</mat-icon>
+                </button>
+                <mat-error
+                    *ngIf="iniciarSesionForm.controls.confirmarContrasena.touched && iniciarSesionForm.controls.confirmarContrasena.invalid">
+                    <span *ngIf="iniciarSesionForm.controls.confirmarContrasena.errors.required">Este campo es obligatorio</span>
+                </mat-error>
+                <mat-hint *ngIf="validarEnvio() && !(iniciarSesionForm.controls.confirmarContrasena.invalid)">
+                    <span>Las contraseñas no coinciden</span>
+                </mat-hint>
+            </mat-form-field>
+        </div>
+    </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+    <button mat-raised-button color="primary" type="submit" (click)="accionEnvio()" [disabled]="validarEnvio() || !(iniciarSesionForm.valid && iniciarSesionForm.dirty)">
+        <mat-icon>save</mat-icon> Registrar
+    </button>
+    <button mat-raised-button color="warn" mat-dialog-close="">
+        <mat-icon>cancel</mat-icon> Cerrar
+    </button>
+</mat-dialog-actions>

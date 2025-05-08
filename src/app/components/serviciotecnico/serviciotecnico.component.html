@@ -1,0 +1,22 @@
+<app-dashboard></app-dashboard>
+<nav  style="background-color: #700d0d;">
+    <div class="container-fluid" style="padding: 10px">
+          <h1 style="text-align: center; color: white;">EQUIPO DE SERVICIO TÉCNICO</h1>
+    </div> 
+</nav>
+<h1 id="developer">Contactar a los desarrolladores:</h1>
+<div id="team">
+    <div id="teamContainer">
+        <div 
+            *ngFor="let member of teamMembers" 
+            class="team-member"
+            (mouseover)="onMouseOver($event)"
+            (mouseout)="onMouseOut($event)">
+            <h3>{{ member.name }}</h3>
+            <p>{{ member.role }}</p>
+            <p><strong>Email:</strong> {{ member.email }}</p>
+            <p><strong>Teléfono:</strong> {{ member.phone }}</p>
+            <a href="https://api.whatsapp.com/send?phone=51{{member.phone}}" target="_blank"><img src="assets/img/whatssap.png" ></a>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,201 @@
+<app-dashboard></app-dashboard>
+<div style="display: flex; flex-wrap: wrap;">
+  <div style="flex: 1; margin-left: 40px;margin-top: 20px;">
+    <h1>GRAFICO DE NIVEL DE EXISTENCIAS</h1>
+    <h2 class="red">(POR PRODUCTOS)</h2>
+    <h2>Stock Total: <span id="stockTotal"></span></h2>
+    <div class="centergrafics">
+    <ngx-charts-tree-map [view]="view" [scheme]="colorScheme3" [results]="single" [gradient]="gradient"
+      [animations]="animations" [labelFormatting]="labelFormatting" (select)="onSelect($event)">
+    </ngx-charts-tree-map>
+  </div>
+  <div class="formcontainer">
+    <select (change)="productosStockOrden($event)">
+      <option value="mayor">Productos con más Stock</option>
+      <option value="menor">Productos con menos Stock</option>
+    </select>
+  </div>
+  </div>
+  <div style="flex: 1; margin-top:20px; margin-left: 30px;">
+    <h1>ANALISIS DE MOVIMIENTOS DE PRODUCTOS</h1>
+    <div class="centergrafics">
+    <ngx-charts-bar-vertical [view]="view2" [scheme]="colorScheme" [results]="single5" [gradient]="gradient"
+      [xAxis]="showXAxis" [yAxis]="showYAxis" [legend]="showLegend" [showXAxisLabel]="showXAxisLabel"
+      [showYAxisLabel]="showYAxisLabel" [xAxisLabel]="xAxisLabel" [yAxisLabel]="yAxisLabel" (select)="onSelect($event)">
+    </ngx-charts-bar-vertical>
+  </div>
+    <div class="formcontainer">
+      <form (submit)="filtrarPorFechaKardexAnio($event)">
+        <label for="anio">Filtrar por Año: </label>
+        <select id="anio" name="anio">
+          <!-- Puedes añadir más años según sea necesario -->
+          <option value="2024">2024</option>
+          <option value="2025">2025</option>
+          <option value="2026">2026</option>
+        </select>
+        <button type="submit">Filtrar</button>
+      </form>
+      <form (submit)="filtrarPorFechaKardex($event)">
+        <label for="mes">Mes:</label>
+        <select id="mes" name="mes">
+          <option value="1">Enero</option>
+          <option value="2">Febrero</option>
+          <option value="3">Marzo</option>
+          <option value="4">Abril</option>
+          <option value="5">Mayo</option>
+          <option value="6">Junio</option>
+          <option value="7">Julio</option>
+          <option value="8">Agosto</option>
+          <option value="9">Septiembre</option>
+          <option value="10">Octubre</option>
+          <option value="11">Noviembre</option>
+          <option value="12">Diciembre</option>
+        </select>
+        <label for="anio">Año:</label>
+        <select id="anio" name="anio">
+          <!-- Puedes añadir más años según sea necesario -->
+          <option value="2024">2024</option>
+          <option value="2025">2025</option>
+          <option value="2026">2026</option>
+        </select>
+        <button type="submit">Filtrar</button>
+      </form>
+    </div>
+  </div>
+  <div style="flex: 1; margin-left: 40px;margin-top: 20px;">
+    <h1>GRAFICO DE ENTRADA DE PRODUCTOS</h1>
+    <div class="centergrafics">
+    <ngx-charts-advanced-pie-chart [view]="view2" [scheme]="colorScheme3" [results]="single3" [gradient]="gradient"
+      (select)="onSelect($event)" (activate)="onActivate($event)" (deactivate)="onDeactivate($event)">
+    </ngx-charts-advanced-pie-chart>
+  </div>
+  <div class="formcontainer">
+    <select (change)="productosEntradasOrden($event)">
+      <option value="mayor">Productos con más Entrada</option>
+      <option value="menor">Productos con menos Entrada</option>
+    </select>
+  </div>
+    <div class="formcontainer">
+      <form (submit)="filtrarPorFechaEntradaAnio($event)">
+
+        <label for="anio">Filtrar por Año: </label>
+        <select id="anio" name="anio">
+          <!-- Puedes añadir más años según sea necesario -->
+          <option value="2024">2024</option>
+          <option value="2025">2025</option>
+          <option value="2026">2026</option>
+        </select>
+
+        <button type="submit">Filtrar</button>
+      </form>
+      <form (submit)="filtrarPorFechaEntrada($event)">
+        <label for="mes">Mes:</label>
+        <select id="mes" name="mes">
+          <option value="1">Enero</option>
+          <option value="2">Febrero</option>
+          <option value="3">Marzo</option>
+          <option value="4">Abril</option>
+          <option value="5">Mayo</option>
+          <option value="6">Junio</option>
+          <option value="7">Julio</option>
+          <option value="8">Agosto</option>
+          <option value="9">Septiembre</option>
+          <option value="10">Octubre</option>
+          <option value="11">Noviembre</option>
+          <option value="12">Diciembre</option>
+        </select>
+        <label for="anio">Año:</label>
+        <select id="anio" name="anio">
+          <!-- Puedes añadir más años según sea necesario -->
+          <option value="2024">2024</option>
+          <option value="2025">2025</option>
+          <option value="2026">2026</option>
+        </select>
+
+        <button type="submit">Filtrar</button>
+      </form>
+    </div>
+  </div>
+  <div style="flex: 1; margin-top:20px; margin-left: 30px;">
+    <h1>GRAFICO DE SALIDA DE PRODUCTOS</h1>
+    <div class="centergrafics">
+    <ngx-charts-advanced-pie-chart [view]="view2" [scheme]="colorScheme2" [results]="single2" [gradient]="gradient"
+      (select)="onSelect($event)" (activate)="onActivate($event)" (deactivate)="onDeactivate($event)">
+    </ngx-charts-advanced-pie-chart>
+  </div>
+  <div class="formcontainer">
+    <select (change)="productosVentasOrden($event)">
+      <option value="mayor">Productos más vendidos</option>
+      <option value="menor">Productos menos vendidos</option>
+    </select>
+  </div>
+    <div class="formcontainer">
+      <form (submit)="filtrarPorFechaSalidaAnio($event)">
+        <label for="anio">Filtrar por Año: </label>
+        <select id="anio" name="anio">
+          <!-- Puedes añadir más años según sea necesario -->
+          <option value="2024">2024</option>
+          <option value="2025">2025</option>
+          <option value="2026">2026</option>
+        </select>
+        <button type="submit">Filtrar</button>
+      </form>
+      <form (submit)="filtrarPorFechaSalida($event)">
+        <label for="mes">Mes:</label>
+        <select id="mes" name="mes">
+          <option value="1">Enero</option>
+          <option value="2">Febrero</option>
+          <option value="3">Marzo</option>
+          <option value="4">Abril</option>
+          <option value="5">Mayo</option>
+          <option value="6">Junio</option>
+          <option value="7">Julio</option>
+          <option value="8">Agosto</option>
+          <option value="9">Septiembre</option>
+          <option value="10">Octubre</option>
+          <option value="11">Noviembre</option>
+          <option value="12">Diciembre</option>
+        </select>
+        <label for="anio">Año:</label>
+        <select id="anio" name="anio">
+          <!-- Puedes añadir más años según sea necesario -->
+          <option value="2024">2024</option>
+          <option value="2025">2025</option>
+          <option value="2026">2026</option>
+        </select>
+        <button type="submit">Filtrar</button>
+      </form>
+    </div>
+  </div>
+  <div style="flex: 1;margin-top:20px; margin-left: 30px;">
+    <h1>GRAFICO DE NIVEL DE EXISTENCIAS</h1>
+    <h2 class="red">(POR CATEGORIA)</h2>
+    <div class="centergrafics" style="margin-bottom: 20px;">
+    <ngx-charts-pie-chart [view]="view2" [scheme]="colorScheme3" [results]="single4" [gradient]="gradient"
+      [legend]="showLegend" [legendPosition]="legendPosition" [labels]="showLabels" [doughnut]="isDoughnut"
+      (select)="onSelect($event)" (activate)="onActivate($event)" (deactivate)="onDeactivate($event)">
+    </ngx-charts-pie-chart>
+    </div>   
+  </div>
+  <div style="flex: 1; margin-top:20px; margin-left: 30px;">
+    <h1>GRAFICO DE LINEA TEMPORAL DE PRECIOS</h1>
+    <div class="centergrafics">
+    <ngx-charts-line-chart [view]="view2" [scheme]="colorScheme" [legend]="legend" [showXAxisLabel]="showXAxisLabel"
+      [showYAxisLabel]="showYAxisLabel" [xAxis]="xAxis" [yAxis]="yAxis" [yScaleMax]=70 [xAxisLabel]="xAxisLabel"
+      [yAxisLabel]="yAxisLabel2" [timeline]="timeline" [results]="multi" (select)="onSelect($event)"
+      (activate)="onActivate($event)" (deactivate)="onDeactivate($event)">
+    </ngx-charts-line-chart>
+  </div>
+    <div class="formcontainer">
+      <label >Filtrar por Producto:</label>
+    <select id="dales2" class="form-select" [(ngModel)]="selectproduct" (ngModelChange)="productgrafic2($event)">
+      <option value="" selected disabled>Seleccionar Producto</option>
+      <option *ngFor="let product of listproducts" [value]="product.prodDesc">
+        {{product.prodDesc}}
+      </option>
+    </select>
+  </div>
+  </div>
+</div>
+<br>
+<br>

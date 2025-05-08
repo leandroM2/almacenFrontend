@@ -1,0 +1,29 @@
+export class incomeDetail2Model {
+    id:  number=0;
+    cantidad:  number=0;
+    precioVentaUnit:  number=0.0;
+    oldPrecioVenta:  number=0.0;
+    saldo:  number=0;
+    incomeId:  number=0;
+    incomeFecha: Date = new Date();
+    incomeEstado: boolean=false;
+    incomeUserId:  number=0;
+    incomeUserNombre: string='';
+    incomeUserAuthId:  number=0;
+    incomeUserAuthNombre: string='';
+    prodId: string='';
+    prodDesc: string='';
+    prodCode: string='';
+    prodStock:  number=0;
+    prodState: boolean=false;
+    catId:  number=0;
+    catName: string='';
+    supplierId:  number=0;
+    supplierRazonSocial: string='';
+    supplierRuc:  number=0;
+    supplierContacto:  number=0;
+    typeId:  number=0;
+    typeName: string='';
+    locationId:  number=0;
+    locationFloor: string='';
+}

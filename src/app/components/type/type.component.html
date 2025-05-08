@@ -1,0 +1,84 @@
+<app-dashboard></app-dashboard>
+<nav style="background-color: #700d0d;">
+    <div class="container-fluid" style="padding: 10px">
+        <h1 style="text-align: center; color: white;">Gestión de Tipos</h1>
+    </div>
+</nav>
+
+<div class="col-md-12 p-2">
+    <div class="mb-3">
+        <input type="text" id="filter" #filterInput placeholder="Buscar por Nombre" [(ngModel)]="filterTerm" style="width: 300px;">
+        <button type="button" class="btn btn-primary btn-sm" style="margin-left: 20px;"(click)="filterTypes()">Filtrar</button>
+        <button type="button" class="btn btn-success btn-sm" style="margin-left: 10px;" (click)="list()">Ver Lista Completa</button>
+    </div>
+    <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#exampleModal"><i class="fa fa-user"></i> Nuevo Tipo</button>
+    <table class="table mt-2 table-bordered">
+        <thead class="table-primary">
+            <tr>
+                <th>ID</th>
+                <th>NOMBRE</th>
+                <th>ESTADO</th>
+                <th>HECHO</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let item of listtype">
+                <td>{{item.typeId}}</td>
+                <td>{{item.typeName}}</td>
+                <!--<td>{{item.typeState}}</td>-->
+                <td *ngIf="item.typeState">{{ "ACTIVO" }}</td>
+                <td *ngIf="!item.typeState">{{ "DESACTIVADO" }}</td>
+
+                <td *ngIf="item.typeState">
+                    <button type="button" class="btn btn-warning btn-sm"  data-bs-toggle="modal" data-bs-target="#exampleModal" (click)="selectItem(item)" >
+                        <i class="fa fa-pencil"></i>
+                    </button>
+                    &nbsp;
+                    <button type="button" class="btn btn-danger btn-sm" (click)="delete(item.typeId)">
+                        <i class="fa fa-arrow-circle-down"></i>
+                    </button>
+                </td>
+                <td *ngIf="!item.typeState">
+                  <button type="button" class="btn btn-warning btn-sm"  data-bs-toggle="modal" data-bs-target="#exampleModal" (click)="selectItem(item)" >
+                      <i class="fa fa-pencil"></i>
+                  </button>
+                  &nbsp;
+                  <button type="button" class="btn btn-success btn-sm" (click)="delete(item.typeId)">
+                      <i class="fa fa-arrow-circle-up"></i>
+                  </button>
+                </td>
+
+
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+
+<!-- TODO: Modals -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 *ngIf="!isUpdate" class="modal-title fs-5">Nuevo Tipo</h1>
+                <h1 *ngIf="isUpdate" class="modal-title fs-5">Actualizar Tipo</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="newType()"></button>
+            </div>
+            <div class="modal-body">
+                <form [formGroup]="formType">
+                    <div class="mb-3 row">
+                        <label class="col-sm-2 col-form-label">Nombre</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" formControlName="typeName">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal" (click)="newType()" >Cerrar</button>
+                <button *ngIf="!isUpdate" type="button" class="btn btn-success btn-sm" (click)="save()">Guardar</button>
+                <button *ngIf="isUpdate" type="button" class="btn btn-warning btn-sm" data-bs-dismiss="modal" (click)="update()">Actualizar</button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,39 @@
+.accordion {
+    background: W#F5f6fa;
+    border: 1px solid #ccc;
+    margin: 1rem 0;
+    border-radius: 5px;
+  }
+  
+  .accordion-header {
+    background-color: #f9f9f9;
+    padding: 10px;
+    font-weight: bold;
+    cursor: pointer;
+  }
+  
+  .accordion-body {
+    padding: 10px;
+    background-color: #fff;
+    transition: height 300ms ease-in-out;
+  }
+  
+  .factory-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .factory-table th, .factory-table td {
+    border: 1px solid #ccc;
+    padding: 8px;
+  }
+  
+  .arrow {
+    float: right;
+    transition: transform 0.3s;
+  }
+  
+  .arrow.expanded {
+    transform: rotate(180deg);
+  }
+  

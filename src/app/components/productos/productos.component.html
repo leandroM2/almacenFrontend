@@ -1,0 +1,164 @@
+<app-dashboard></app-dashboard>
+    <nav  style="background-color: #700d0d;">
+        <div class="container-fluid" style="padding: 10px">
+              <h1 style="text-align: center; color: white;">Gestión de Productos</h1>
+        </div> 
+    </nav>
+    
+    <div class="col-md-12 p-2">
+      <div class="mb-3">
+        <input type="text" id="filter" placeholder="Buscar por Nombre" [(ngModel)]="filterTerm" style="width: 300px;">
+        <button type="button" class="btn btn-primary btn-sm" style="margin-left: 20px;"(click)="filterCategories()">Filtrar</button>
+        <button type="button" class="btn btn-success btn-sm" style="margin-left: 10px;" (click)="list()">Ver Lista Completa</button>
+      </div>
+        <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#exampleModal" (click)="prodStockcero()"><i class="fa fa-user"></i> Nuevo Producto</button>
+        <div id="tableToPDF">
+        <table class="table mt-2 table-bordered">
+            <thead class="table-primary">
+              <tr>
+                <th>COD. SPA</th>
+                <th>COD. PROVEEDOR</th>
+                <th>PROVEEDOR</th>
+                <th>FÁBRICA</th>
+                <th>FAMILIA</th>
+                <th>TIPO</th>
+                <th>DESCRIPCIÓN</th>
+                <th>STOCK</th>
+                <th>PRECIO</th>
+                <th>UBICACIÓN</th>
+                <th>ESTADO</th>
+                <th>HACER</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of listproducts">
+                <td>{{item.prodId}}</td>
+                <td>{{item.prodCode}}</td>
+                <td>{{item.supplierRazonSocial}}</td>
+                <td>{{item.supDetFactory}}</td>
+                <td>{{item.catName}}</td>
+                <td>{{item.typeName}}</td>
+                <td>{{item.prodDesc}}</td>
+                <td>{{item.prodStock}}</td>
+                <td>$ {{item.prodPrice}}</td>
+                <td>{{item.locationFloor}}</td>
+                
+                <td *ngIf="item.prodState">{{ "ACTIVO" }}</td>
+                <td *ngIf="!item.prodState">{{ "DESACTIVADO" }}</td>
+                <td *ngIf="item.prodState">
+                    <button type="button" class="btn btn-warning btn-sm"  data-bs-toggle="modal" data-bs-target="#exampleModal" (click)="selectItem(item)" >
+                        <i class="fa fa-pencil"></i>
+                    </button>
+                    &nbsp;
+                    <button type="button" class="btn btn-danger btn-sm" (click)="delete(item.prodId)">
+                        <i class="fa fa-arrow-circle-down"></i>
+                    </button>
+                </td>
+                <td *ngIf="!item.prodState">
+                  <button type="button" class="btn btn-warning btn-sm"  data-bs-toggle="modal" data-bs-target="#exampleModal" (click)="selectItem(item)" >
+                      <i class="fa fa-pencil"></i>
+                  </button>
+                  &nbsp;
+                  <button type="button" class="btn btn-success btn-sm" (click)="delete(item.prodId)">
+                      <i class="fa fa-arrow-circle-up"></i>
+                  </button>
+              </td>
+              </tr>
+            </tbody>
+          </table>
+    </div>
+  </div>
+
+<!-- TODO: Modals -->
+<div class="custom-modal">
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 *ngIf="!isUpdate" class="modal-title fs-5">Nuevo Producto</h1>
+          <h1 *ngIf="isUpdate" class="modal-title fs-5">Actualizar Producto</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="newProduct()"></button>
+        </div>
+        <div class="modal-body">
+            <form [formGroup]="formProduct">
+                <div class="mb-3 row">
+                    <label class="col-sm-2 col-form-label">DESCR.</label>
+                    <div class="col-sm-10">
+                      <input type="text" class="form-control" formControlName="prodDesc">
+                    </div>
+                </div>
+                <div class="mb-3 row">
+                    <label class="col-sm-2 col-form-label">COD. PROV.</label>
+                    <div class="col-sm-10">
+                      <input type="text" class="form-control" formControlName="prodCode">
+                    </div>
+                </div>
+                <div class="mb-3 row">
+                    <label class="col-sm-2 col-form-label">PRECIO</label>
+                    <div class="col-sm-10">
+                      <input type="text" class="form-control" formControlName="prodPrice">
+                    </div>
+                </div>
+                <div class="mb-3 row">
+                  <label class="col-sm-2 col-form-label">STOCK</label>
+                  <div class="col-sm-10">
+                    <input type="text" style="background-color: rgb(229, 219, 219);" class="form-control" formControlName="prodStock" readonly>
+                  </div>
+              </div>
+              <div class="mb-3 row">
+                <label class="col-sm-2 col-form-label">FAMILIA</label>
+                <div class="col-sm-10">
+                    <select id="cat" class="form-select" formControlName="catId"  style="background-color:rgb(235, 235, 235)">
+                        <option value="" selected disabled>Seleccionar Familia</option>
+                        <option *ngFor="let category of listcategorias" [value]="category.catId">
+                            {{category.catName}}
+                        </option>
+                    </select>
+                </div>
+              </div>
+
+                <div class="mb-3 row">
+                  <label class="col-sm-2 col-form-label">PROV.</label>
+                  <div class="col-sm-10">
+                      <select id="prov" class="form-select" formControlName="supplierId"  style="background-color:rgb(235, 235, 235)">
+                          <option value="" selected disabled>Seleccionar Proveedor</option>
+                          <option *ngFor="let proveedor of listProveedores" [value]="proveedor.id">
+                              {{proveedor.razonSocial}}
+                          </option>
+                      </select>
+                  </div>
+                </div>
+                <div class="mb-3 row">
+                  <label class="col-sm-2 col-form-label">TIPO</label>
+                  <div class="col-sm-10">
+                      <select id="type" class="form-select" formControlName="typeId"  style="background-color:rgb(235, 235, 235)">
+                          <option value="" selected disabled>Seleccionar Tipo</option>
+                          <option *ngFor="let type of listtypes" [value]="type.typeId">
+                              {{type.typeName}}
+                          </option>
+                      </select>
+                  </div>
+                </div>
+                <div class="mb-3 row">
+                  <label class="col-sm-2 col-form-label">LOCACIÓN</label>
+                  <div class="col-sm-10">
+                      <select id="location" class="form-select" formControlName="locationId"  style="background-color:rgb(235, 235, 235)">
+                          <option value="" selected disabled>Seleccionar Locación</option>
+                          <option *ngFor="let location of listlocations" [value]="location.locationId">
+                              {{location.locationFloor}}
+                          </option>
+                      </select>
+                  </div>
+                </div>
+              </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal" (click)="newProduct()">Cerrar</button>
+          <button *ngIf="!isUpdate" type="button" class="btn btn-success btn-sm" (click)="save()">Guardar</button>
+          <button *ngIf="isUpdate" type="button" class="btn btn-warning btn-sm" data-bs-dismiss="modal" (click)="update()">Actualizar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+  <button type="button" class="btn btn-danger btn-sm" (click)="generatePDF()">Generar PDF</button>

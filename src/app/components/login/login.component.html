@@ -1,0 +1,43 @@
+<mat-toolbar color="primary">
+    <mat-toolbar-row fxLayout="row">
+        <span>Iniciar Sesión</span>
+        <span class="spacer"></span>
+        <button class="mat-dialog-close" mat-icon-button mat-dialog-close>
+            <mat-icon>close</mat-icon>
+        </button>
+    </mat-toolbar-row>
+</mat-toolbar>
+<mat-dialog-content class="mat-typography">
+    <form [formGroup]="loginForm">
+        <div fxFlex fxLayout="column">
+            <mat-form-field appearance="standard" fxFlex>
+                <mat-label>Email</mat-label>
+                <input matInput formControlName="email" autocomplete="" required>
+                <mat-error
+                    *ngIf="loginForm.controls.email.touched && loginForm.controls.email.invalid">
+                    <span *ngIf="loginForm.controls.email.errors.required">Este campo es obligatorio</span>
+                    <span *ngIf="loginForm.controls.email.errors.pattern">Este campo no es válido</span>
+                </mat-error>
+            </mat-form-field>
+            <mat-form-field appearance="standard" fxFlex>
+                <mat-label>Contraseña</mat-label>
+                <input matInput formControlName="contrasena" type="password" required [type]="contra ? 'contrasena': 'text'">
+                <button type="button" mat-icon-button matSuffix (click)="contra = !contra" [attr.arial-label]="'Hide contrasena'" [attr.arial-label]="'Hide'">
+                    <mat-icon>{{contra ? 'visibility_off' : 'visibility'}}</mat-icon>
+                </button>
+                <mat-error
+                    *ngIf="loginForm.controls.contrasena.touched && loginForm.controls.contrasena.invalid">
+                    <span *ngIf="loginForm.controls.contrasena.errors.required">Este campo es obligatorio</span>
+                </mat-error>
+            </mat-form-field>
+        </div>
+    </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+    <button mat-raised-button color="primary" type="submit" (click)="accionEnvio()"  [disabled]="!(loginForm.valid && loginForm.dirty)">
+        <mat-icon>login</mat-icon> Iniciar Sesion
+    </button>
+    <button mat-raised-button color="warn" mat-dialog-close="">
+        <mat-icon>close</mat-icon> Cerrar
+    </button>
+</mat-dialog-actions>

@@ -1,0 +1,97 @@
+table {
+    text-align: center;
+}
+
+// .table-details {
+//     // width: 100%;
+   
+//   }
+  
+  // .table-details td {
+  //   width: 0.5%; /* Ajusta el porcentaje según el número de columnas */
+  // }
+
+  // .producto {
+  //   width: 10%;
+  // }
+
+  // .aver {
+  //   width: 7%;
+  // }
+
+  .detmov {
+    display: inline-flex;
+    flex-wrap: wrap;
+    font-size: 18px;
+    margin: 30px 0px;
+  }
+  
+  // label {
+  //   margin-left:20px;
+  //   margin-right:20px;
+  // }
+
+  .hidden {
+    display: none;
+}
+
+// .buttons {
+//   margin-top: 5px;
+// }
+
+#extend {
+  width: 250px;
+}
+
+#mov {
+  width: 150px;
+}
+
+.buttons {
+  margin-top: 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.filter {
+  margin-left: 15px;
+  margin-top: 10px;
+
+}
+
+.buttons .btn {
+  margin: 0 3px; /* Espaciado opcional entre botones */
+}
+
+.left-buttons {
+  display: flex;
+}
+
+.right-buttons {
+  display: flex;
+  margin-right: 15px;
+}
+
+#stockact,#stockact2 ,#preact,#preact2 ,#preprom {
+  background-color: rgb(229, 219, 219);
+}
+
+#end,#start{
+  font-size: 16px;
+}
+
+
+#end:hover, #start:hover {
+  background-color: rgb(198, 244, 253);
+}
+
+.filt {
+  display: flex;
+}
+
+#dales {
+  margin-left: 15px;
+  width: 350px;
+  background-color: rgb(235, 235, 235);
+}

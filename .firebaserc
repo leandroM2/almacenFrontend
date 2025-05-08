@@ -1,0 +1,9 @@
+{
+  "projects": {
+    "default": "inventariodnx-test",
+    "inventariodnx-test": "inventariodnx-test-91103"
+  },
+  "targets": {},
+  "etags": {},
+  "dataconnectEmulatorConfig": {}
+}

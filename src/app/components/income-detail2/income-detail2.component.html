@@ -1,0 +1,133 @@
+<app-dashboard></app-dashboard>
+<nav  style="background-color: #700d0d;">
+    <div class="container-fluid" style="padding: 10px">
+          <h1 style="text-align: center; color: white;">Gestión de Detalle de Entradas 2</h1>
+    </div> 
+</nav>
+
+<div class="col-md-12 p-2">
+    <div class="mb-3">
+        <input type="date" id="start" [(ngModel)]="startDate" [(ngModel)]="fechaInicio" style="width: 250px;">
+        <input type="date" id="end" [(ngModel)]="endDate" [(ngModel)]="fechaFin" style="width: 250px;">
+        <button type="button" class="btn btn-primary btn-sm" style="margin-left: 20px;"(click)="filterCategories()">Filtrar por Fechas</button>
+        <button type="button" class="btn btn-success btn-sm" style="margin-left: 10px;" (click)="list()">Ver Lista Completa</button>
+    </div>
+    <div id="tableToPDF">
+        <table class="table mt-2 table-bordered" >
+            <thead class="table-primary">
+                <tr>
+                    <th>ID</th>
+                    <th>FECHA</th>
+                    <th>PROD. DESC.</th>
+                    <th>COD-SPA</th>
+                    <th>NUEVO. PRE. VENTA</th>
+                    <th>PRE. ACTUAL</th>
+                    <th>CANTIDAD</th>
+                    <th>STOCK</th>
+                    <th>Recepcionado por:</th>
+                    <th>Autorizado por:</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let item of listIncomeDetail2">
+                    <td>{{item.id}}</td>
+                    <td>{{item.incomeFecha}}</td>
+                    <td>{{item.prodDesc}}</td>
+                    <td>{{item.prodId}}</td>
+                    <td>{{item.precioVentaUnit}}</td>
+                    <td>{{item.oldPrecioVenta}}</td>
+                    <td>{{item.cantidad}}</td>
+                    <td>{{item.saldo}}</td>
+                    <td>{{item.incomeUserNombre}}</td>
+                    <td>{{item.incomeUserAuthNombre}}</td>
+                    <td>
+                        <button type="button" class="btn btn-warning btn-sm"  data-bs-toggle="modal" data-bs-target="#exampleModal" (click)="selectItem(item)" >
+                            <i class="fa fa-pencil"></i>
+                        </button>
+                        &nbsp;
+                        <button type="button" class="btn btn-danger btn-sm" (click)="delete(item.id)">
+                            <i class="fa fa-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- TODO: Modals -->
+<!-- modal de incomeDetail2 -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 *ngIf="!isUpdate" class="modal-title fs-5">Nuevo Detalle</h1>
+                <h1 *ngIf="isUpdate" class="modal-title fs-5">Actualizar Detalle</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+                (click)="newIncomeDetail2()"></button>
+            </div>
+            <div class="modal-body">
+                <form [formGroup]="formIncomeDetail2">
+                    <div class="mb-3 row">
+                        <label class="col-sm-2 col-form-label">Producto</label>
+                        <div class="col-sm-10">
+                            <select id="prod" class="form-select" formControlName="prodId"
+                            (ngModelChange)="ProductDetails($event)">
+                                <option value="" selected disabled>Seleccionar Producto</option>
+                                <option *ngFor="let product of listproducts" [value]="product.prodId">
+                                    {{product.prodId}} - {{product.prodDesc}}
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="mb-3 row">
+                        <label class="col-sm-2 col-form-label">Stock</label>
+                        <div class="col-sm-10">
+                          <input type="number" class="form-control" formControlName="saldo" readonly>
+                        </div>
+                    </div>
+                    <div class="mb-3 row">
+                        <label class="col-sm-2 col-form-label">PRE. ACTUAL:</label>
+                        <div class="col-sm-10">
+                            <input type="number" formControlName="oldPrecioVenta" class="form-control" readonly>
+                        </div>
+                    </div>
+                    <div class="mb-3 row">
+                        <label class="col-sm-2 col-form-label">Precio Venta:</label>
+                        <div class="col-sm-10">
+                            <input type="number" min="0.0" step="0.01" class="form-control"
+                            formControlName="precioVenta" (input)="onPrecioChange()">
+                        </div>
+                    </div>
+                    <div class="mb-3 row">
+                        <label class="col-sm-2 col-form-label">Precio Promedio:</label>
+                        <div class="col-sm-10">
+                            <input type="number" step="0.01" class="form-control"
+                            formControlName="precioVentaUnit" readonly>
+                        </div>
+                    </div>
+                    <div class="mb-3 row">
+                        <label class="col-sm-2 col-form-label">Cantidad</label>
+                        <div class="col-sm-10">
+                            <input type="number" min=0 id="cantidad" class="form-control" formControlName="cantidad">
+                        </div>
+                    </div>
+                    <div class="mb-3 row">
+                        <label class="col-sm-2 col-form-label">ID Entrada</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" formControlName="incomeId" readonly>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal" (click)="newIncomeDetail2()" >Cerrar</button>
+                <button *ngIf="!isUpdate" type="button" class="btn btn-success btn-sm"
+                    (click)="save()">Guardar</button>
+                <button *ngIf="isUpdate" type="button" class="btn btn-warning btn-sm" data-bs-dismiss="modal" (click)="update()">Actualizar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<button type="button" class="btn btn-danger btn-sm" (click)="generatePDF()">Generar PDF</button>

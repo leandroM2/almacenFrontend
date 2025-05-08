@@ -1,0 +1,190 @@
+<app-dashboard></app-dashboard>
+<nav style="background-color: #700d0d;">
+  <div class="container-fluid" style="padding: 10px">
+    <h1 style="text-align: center; color: white;">Gestión de Usuarios</h1>
+  </div>
+</nav>
+
+<div class="col-md-12 p-2">
+  <div class="mb-3">
+    <input type="text" id="filter" placeholder="Buscar por Nombre" [(ngModel)]="filterTerm" style="width: 300px;">
+    <button type="button" class="btn btn-primary btn-sm" style="margin-left: 20px;"
+      (click)="filterCategories()">Filtrar</button>
+    <button type="button" class="btn btn-success btn-sm" style="margin-left: 10px;" (click)="list()">Ver Lista
+      Completa</button>
+  </div>
+  <div>
+    <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#exampleModal"
+      style="margin-right: 85%;"><i class="fa fa-user"></i> Nuevo usuario</button>
+    <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#exampleModalfirma"><i
+        class="fa fa-thumbs-up"></i> Subir Firma</button>
+  </div>
+  <table class="table mt-2 table-bordered">
+    <thead class="table-primary">
+      <tr>
+        <th>ID</th>
+        <th>Nombre</th>
+        <th>Email</th>
+        <th>Estado</th>
+        <th>Rol</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of listusers">
+        <td>{{item.id}}</td>
+        <td>{{item.nombre}}</td>
+        <td>{{item.email}}</td>
+        <td>{{item.estado}}</td>
+        <td>{{item.rol}}</td>
+        <td>
+          <button type="button" class="btn btn-success btn-sm" (click)="auth(item.id)"
+          [disabled]="item.estado">
+            <i class="fa fa-check"></i>
+          </button>
+          &nbsp;
+          <button type="button" class="btn btn-danger btn-sm" (click)="delete(item.id)"
+          [disabled]="!item.estado">
+            <i class="fa fa-ban"></i>
+          </button>
+          &nbsp;
+          <button type="button" class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#exampleModal"
+            (click)="selectItem(item)">
+            <i class="fa fa-pencil"></i>
+          </button>
+          &nbsp;
+          <button type="button" class="btn btn-dark btn-sm" (click)="deletefirm(item.nombre)">
+            <i class="fa fa-thumbs-down"></i>
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- TODO: Modals -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 *ngIf="!isUpdate" class="modal-title fs-5">Nuevo Usuario</h1>
+        <h1 *ngIf="isUpdate" class="modal-title fs-5">Actualizar Usuario</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="newUser()"></button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="formUser">
+          <div class="mb-3 row">
+            <label class="col-sm-2 col-form-label">Nombre</label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control" formControlName="nombre">
+            </div>
+          </div>
+          <div class="mb-3 row">
+            <label class="col-sm-2 col-form-label">Email</label>
+            <div class="col-sm-10">
+              <input type="email" class="form-control" formControlName="email">
+            </div>
+          </div>
+          <div class="mb-3 row">
+            <label class="col-sm-2 col-form-label">Contraseña</label>
+            <div class="col-sm-10">
+              <input type="password" class="form-control" formControlName="contrasena">
+            </div>
+          </div>
+          <div class="mb-3 row">
+            <label class="col-sm-2 col-form-label">Rol</label>
+            <div class="col-sm-10">
+              <select id="user" class="form-select" formControlName="rol" style="background-color:rgb(235, 235, 235)">
+                <option value="" selected disabled>Seleccionar Rol</option>
+                <option value="admin">admin</option>
+                <option value="user">user</option>
+              </select>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal" (click)="newUser()">Cerrar</button>
+        <button *ngIf="!isUpdate" type="button" class="btn btn-success btn-sm" (click)="save()">Guardar</button>
+        <button *ngIf="isUpdate" type="button" class="btn btn-warning btn-sm" data-bs-dismiss="modal"
+          (click)="update()">Actualizar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- subir firma -->
+
+<div class="modal fade" id="exampleModalfirma" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5">Subir Firma</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="mb-3 row">
+          <label class="col-sm-2 col-form-label">Imagen</label>
+          <div class="col-sm-10">
+            <input type="file" (change)="handleFileInput($event)" />
+            <div *ngIf="uploadProgress > 0 && uploadProgress < 100">
+              Upload Progress: {{ uploadProgress }}%
+            </div>
+            <div *ngIf="uploadProgress === 100">
+              {{ uploadResponse }}
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cerrar</button>
+        <button *ngIf="!isUpdate" type="button" class="btn btn-success btn-sm" (click)="uploadFile()">Subir</button>
+        <!-- <button *ngIf="isUpdate" type="button" class="btn btn-warning btn-sm" data-bs-dismiss="modal" (click)="update()">Actualizar</button> -->
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Actualizar usuario -->
+<div class="modal fade" id="exampleModalactu" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 *ngIf="!isUpdate" class="modal-title fs-5">Nuevo Usuario</h1>
+        <h1 *ngIf="isUpdate" class="modal-title fs-5">Actualizar Usuario</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="newUser()"></button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="formUser">
+          <div class="mb-3 row">
+            <label class="col-sm-2 col-form-label">Nombre</label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control" formControlName="nombre">
+            </div>
+          </div>
+          <div class="mb-3 row">
+            <label class="col-sm-2 col-form-label">Email</label>
+            <div class="col-sm-10">
+              <input type="email" class="form-control" formControlName="email">
+            </div>
+          </div>
+          <div class="mb-3 row">
+            <label class="col-sm-2 col-form-label">Rol</label>
+            <div class="col-sm-10">
+              <select class="form-select" formControlName="rol">
+                <option value="admin">admin</option>
+                <option value="user">user</option>
+              </select>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal" (click)="newUser()" >Cerrar</button>
+        <button *ngIf="!isUpdate" type="button" class="btn btn-success btn-sm" (click)="save()">Guardar</button>
+        <button *ngIf="isUpdate" type="button" class="btn btn-warning btn-sm" data-bs-dismiss="modal"
+          (click)="update()">Actualizar</button>
+      </div>
+    </div>
+  </div>
+</div>
